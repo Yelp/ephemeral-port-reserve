@@ -1,0 +1,15 @@
+language: python
+env:
+    - TOXENV=py27
+    - TOXENV=py34
+    - TOXENV=py35
+    - TOXENV=pypy
+install: pip install coveralls tox
+script: tox
+sudo: false
+addons:
+    apt:
+        sources:
+            - deadsnakes
+        packages:
+            - python3.5-dev
