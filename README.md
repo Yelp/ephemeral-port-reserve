@@ -6,12 +6,10 @@ bind to port 8080, only one of them can succeed.
 The usual solution is the "port 0 trick". If you bind to port 0, your kernel will
 find some arbitrary high-numbered port that's unused and bind to that. Afterward
 you can query the actual port that was bound to if you need to use the port number
-elsewhere.
-
-But there are cases where the port 0 trick won't work. For example, mysqld takes
-port 0 to mean "the port configured in my.cnf". Docker can bind your containers
-to port 0, but uses its own implementation to find a free port which races and
-fails in the face of parallelism.
+elsewhere. However, there are cases where the port 0 trick won't work. For example,
+mysqld takes port 0 to mean "the port configured in my.cnf". Docker can bind your
+containers to port 0, but uses its own implementation to find a free port which 
+races and fails in the face of parallelism.
 
 `ephemeral-port-reserve` provides an implementation of the port 0 trick which
 is reliable and race-free. You can use it like so:
