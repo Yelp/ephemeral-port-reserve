@@ -15,7 +15,7 @@ races and fails in the face of parallelism.
 is reliable and race-free. You can use it like so:
 
 ```!bash
-PORT="$(ephemeral-port-reserve)
+PORT="$(ephemeral-port-reserve)"
 docker run -p 127.0.0.1:$PORT:5000 registry:2
 ```
 
