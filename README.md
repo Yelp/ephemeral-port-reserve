@@ -34,3 +34,7 @@ To check your own particular value:
 $ cat /proc/sys/net/ipv4/tcp_fin_timeout
 60
 ```
+
+**NOTE:** By default, the port returned is *specifically* for `localhost`, aka `127.0.0.1`.
+If you bind instead to `0.0.0.0`, you may encounter a port conflict. If you need to
+bind to a non-localhost IP, you can pass it as the first argument.
