@@ -25,7 +25,9 @@ def reserve(ip=LOCALHOST):
     s = socket()
     s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     s.bind((ip, 0))
-    s.listen(0)
+
+    # the connect below deadlocks on kernel >= 4.4.0 unless this arg is great than zero
+    s.listen(1)
 
     sockname = s.getsockname()
 
