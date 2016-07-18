@@ -8,7 +8,7 @@ find some arbitrary high-numbered port that's unused and bind to that. Afterward
 you can query the actual port that was bound to if you need to use the port number
 elsewhere. However, there are cases where the port 0 trick won't work. For example,
 mysqld takes port 0 to mean "the port configured in my.cnf". Docker can bind your
-containers to port 0, but uses its own implementation to find a free port which 
+containers to port 0, but uses its own implementation to find a free port which
 races and fails in the face of parallelism.
 
 `ephemeral-port-reserve` provides an implementation of the port 0 trick which
