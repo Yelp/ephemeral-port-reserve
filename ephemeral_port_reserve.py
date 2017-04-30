@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import contextlib
 from socket import SO_REUSEADDR
 from socket import socket
 from socket import SOL_SOCKET
@@ -22,21 +23,20 @@ def reserve(ip=LOCALHOST):
     To reserve a port for a different ip, provide the ip as the first argument.
     Note that IP 0.0.0.0 is interpreted as localhost.
     """
-    s = socket()
-    s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-    s.bind((ip, 0))
+    with contextlib.closing(socket()) as s:
+        s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        s.bind((ip, 0))
 
-    # the connect below deadlocks on kernel >= 4.4.0 unless this arg is greater than zero
-    s.listen(1)
+        # the connect below deadlocks on kernel >= 4.4.0 unless this arg is greater than zero
+        s.listen(1)
 
-    sockname = s.getsockname()
+        sockname = s.getsockname()
 
-    # these three are necessary just to get the port into a TIME_WAIT state
-    s2 = socket()
-    s2.connect(sockname)
-    s.accept()
-
-    return sockname[1]
+        # these three are necessary just to get the port into a TIME_WAIT state
+        with contextlib.closing(socket()) as s2:
+            s2.connect(sockname)
+            s.accept()
+            return sockname[1]
 
 
 def main():  # pragma: no cover
