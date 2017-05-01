@@ -10,7 +10,7 @@ setup(
     description=(
         'Bind to an ephemeral port, force it into the TIME_WAIT state, and unbind it.'
     ),
-    version='1.0.1',
+    version='1.0.2',
     classifiers=[
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
