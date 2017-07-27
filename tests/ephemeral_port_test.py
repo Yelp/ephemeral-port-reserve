@@ -47,3 +47,22 @@ def test_localhost():
 def test_fqdn():
     fqip = socket.gethostbyname(getfqdn())
     assert_ip(fqip)
+
+
+def test_preferred_port():
+    import ephemeral_port_reserve
+    print(ephemeral_port_reserve)
+    port = reserve()
+    port2 = reserve(port=port)
+    assert port == port2
+    assert bind_reuse(LOCALHOST, port2)
+
+
+def test_preferred_port_in_use():
+    """if preferred port is in use, it will find an unused port"""
+    port = reserve()
+    sock = bind_reuse(LOCALHOST, port)
+    sock.listen(1)  # make the port in-use
+    port2 = reserve(port=port)
+    assert port != port2
+    assert bind_reuse(LOCALHOST, port2)
