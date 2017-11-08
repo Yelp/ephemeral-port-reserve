@@ -1,26 +1,19 @@
+repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    sha: 616c1ebd1898c91de9a0548866a59cbd9f4547f6
+    sha: v1.1.1
     hooks:
     -   id: trailing-whitespace
-        language_version: python2.7
     -   id: end-of-file-fixer
-        language_version: python2.7
     -   id: autopep8-wrapper
-        language_version: python2.7
     -   id: debug-statements
-        language_version: python2.7
     -   id: name-tests-test
-        language_version: python2.7
     -   id: flake8
-        language_version: python2.7
     -   id: check-added-large-files
-        language_version: python2.7
 -   repo: https://github.com/asottile/reorder_python_imports
-    sha: 3d86483455ab5bd06cc1069fdd5ac57be5463f10
+    sha: v0.3.5
     hooks:
     -   id: reorder-python-imports
         args: [
             '--add-import', 'from __future__ import absolute_import',
             '--add-import', 'from __future__ import unicode_literals',
         ]
-        language_version: python2.7
