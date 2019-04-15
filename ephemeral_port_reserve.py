@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 import contextlib
+import errno
 from socket import error as SocketError
 from socket import SO_REUSEADDR
 from socket import socket
@@ -30,8 +31,8 @@ def reserve(ip=LOCALHOST, port=0):
         try:
             s.bind((ip, port))
         except SocketError as e:
-            # socket.error: [Errno 98] Address already in use
-            if e.errno == 98 and port != 0:
+            # socket.error: EADDRINUSE Address already in use
+            if e.errno == errno.EADDRINUSE and port != 0:
                 s.bind((ip, 0))
             else:
                 raise
