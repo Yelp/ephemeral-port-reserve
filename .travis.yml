@@ -1,17 +1,13 @@
 language: python
-env:
-    - TOXENV=py27
-    - TOXENV=py35
-    - TOXENV=py36
-    - TOXENV=pypy
+matrix:
+    include:
+    - env: TOXENV=py27
+      python: 2.7
+    - env: TOXENV=py35
+      python: 3.5
+    - env: TOXENV=py36
+      python: 3.6
+    - env: TOXENV=pypy
+      python: pypy
 install: pip install coveralls tox
 script: tox
-sudo: false
-addons:
-    apt:
-        sources:
-            - deadsnakes
-        packages:
-            - python3.5-dev
-            - python3.6-dev
-            - pypy-dev
