@@ -45,8 +45,9 @@ def reserve(ip=LOCALHOST, port=0):
         # these three are necessary just to get the port into a TIME_WAIT state
         with contextlib.closing(socket()) as s2:
             s2.connect(sockname)
-            s.accept()
-            return sockname[1]
+            sock, _ = s.accept()
+            with contextlib.closing(sock):
+                return sockname[1]
 
 
 def main():  # pragma: no cover
