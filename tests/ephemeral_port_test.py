@@ -8,6 +8,7 @@ from socket import SO_REUSEADDR
 from socket import socket as Socket
 from socket import SOL_SOCKET
 
+from ephemeral_port_reserve import get_port_from_hash_key
 from ephemeral_port_reserve import LOCALHOST
 from ephemeral_port_reserve import reserve
 
@@ -66,3 +67,16 @@ def test_preferred_port_in_use():
     port2 = reserve(port=port)
     assert port != port2
     assert bind_reuse(LOCALHOST, port2)
+
+
+def test_get_port_from_hash_key():
+    # Two calls with the same service should try to reserve the same port.
+    port1 = get_port_from_hash_key('fake_service')
+    port2 = get_port_from_hash_key('fake_service')
+    assert port1 == port2
+    assert 33000 <= port1 < 58000
+
+    # A third call with a different service should try to reserve a different port.
+    port3 = get_port_from_hash_key('different_fake_service')
+    assert port1 != port3
+    assert 33000 <= port3 < 58000

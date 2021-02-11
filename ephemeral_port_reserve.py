@@ -2,12 +2,16 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import argparse
 import contextlib
 import errno
+import hashlib
 from socket import error as SocketError
 from socket import SO_REUSEADDR
 from socket import socket
 from socket import SOL_SOCKET
+
+from pkg_resources import get_distribution
 
 LOCALHOST = '127.0.0.1'
 
@@ -51,9 +55,46 @@ def reserve(ip=LOCALHOST, port=0):
                 return sockname[1]
 
 
+def get_port_from_hash_key(hash_key):
+    """Take the value provided by --context and return a consistent port number"""
+    hash_number = int(hashlib.sha1(hash_key.encode('utf8')).hexdigest(), 16)
+    # clamp the port number between 33000 and 56000
+    return 33000 + (hash_number % 25000)
+
+
+def get_args_parser():  # pragma: no cover
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        '-v', '--version',
+        action='version',
+        version=get_distribution('ephemeral_port_reserve').version,
+    )
+
+    parser.add_argument(
+        '-c', '--context',
+        help='Optionally provide a string, used as a hash key to attempt to return a consistent port.',
+    )
+
+    parser.add_argument('ip', nargs='?', help='IP to reserve a port on.')
+    parser.add_argument('port', nargs='?', help='preferred port to reserve. overrides --context if provided.')
+
+    return parser
+
+
 def main():  # pragma: no cover
+    parser = get_args_parser()
     from sys import argv
-    port = reserve(*argv[1:])
+    args = parser.parse_args(argv[1:])
+
+    # hash --context into a valid port number
+    port_from_context = get_port_from_hash_key(args.context) if args.context is not None else None
+
+    port = reserve(
+        ip=args.ip or LOCALHOST,
+        port=args.port or port_from_context or 0,
+    )
+
     print(port)
 
 
