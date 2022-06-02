@@ -15,7 +15,7 @@ LOCALHOST = '127.0.0.1'
 def reserve(ip=LOCALHOST, port=0):
     """Bind to an ephemeral port, force it into the TIME_WAIT state, and unbind it.
 
-    This means that further ephemeral port alloctions won't pick this "reserved" port,
+    This means that further ephemeral port allocations won't pick this "reserved" port,
     but subprocesses can still bind to it explicitly, given that they use SO_REUSEADDR.
     By default on linux you have a grace period of 60 seconds to reuse this port.
     To check your own particular value:
