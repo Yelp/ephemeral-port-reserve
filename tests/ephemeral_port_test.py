@@ -45,7 +45,11 @@ def test_localhost():
 
 
 def test_fqdn():
-    fqip = socket.gethostbyname(getfqdn())
+    try:
+        fqip = socket.gethostbyname(getfqdn())
+    except (socket.gaierror, socket.error):
+        import pytest
+        pytest.skip("Could not resolve FQDN")
     assert_ip(fqip)
 
 
